@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, set } from "vue";
 const input = ref("");
 
 function addDinner(din) {
