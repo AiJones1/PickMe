@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row
-      class="flex justify-center"
+      class="flex justify-center pb-12"
     >
       <h1>Pick 4 Me</h1>
       <Icon
@@ -10,8 +10,12 @@
         height="44"
       />
     </v-row>
-    <v-row justify="center">
-      <picking />
+    <v-row
+      justify="center"
+    >
+      <v-col cols="4">
+        <picking />
+      </v-col>
     </v-row>
   </v-container>
 </template>
