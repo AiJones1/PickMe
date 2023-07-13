@@ -8,25 +8,28 @@
       item-title="title"
       item-value="value"
       variant="solo-filled"
-      ></v-select
-    >
+    />
 
-    <v-btn v-if="selectionView === 'dinner'" @click="pickDinner()"
-      >Choose Dinner</v-btn
+    <v-btn
+      v-if="selectionView === 'dinner'"
+      @click="pickDinner()"
     >
-    <v-btn v-else-if="selectionView === 'date'" @click="pickDate()"
-      >Choose Date</v-btn
+      Choose Dinner
+    </v-btn>
+    <v-btn
+      v-else-if="selectionView === 'date'"
+      @click="pickDate()"
     >
+      Choose Date
+    </v-btn>
     <v-select
       v-model="seeMenu"
       label="See Choices"
       :items="opts"
       item-title="title"
       item-value="value"
-      variant="solo-filled">
-
- 
-    </v-select>
+      variant="solo-filled"
+    />
 
     <h3 v-if="selectionView === 'dinner'">
       Tonight's Dinner: {{ tonightDinner }}
@@ -35,16 +38,28 @@
       Tonight's date: {{ tonightOption }}
     </h3>
 
-    <ul v-if="selectionView === 'dinner'" id="dinnerOptions">
-      Dinner Options
-      <li v-if="seeMenu ==='yes'" v-for="value in dinner">
-
+    Dinner Options
+    <ul
+      v-if="selectionView === 'dinner'"
+      id="dinnerOptions"
+    >
+      <li
+        v-for="value in dinner"
+        v-if="seeMenu ==='yes'"
+      >
         {{ value }}
       </li>
     </ul>
-    <ul v-if="selectionView === 'date'" id="dateOptions">
-      Date Options
-      <li v-if="seeMenu ==='yes'" v-for="value in date">
+    <h3>Date Options</h3>
+    <ul
+      v-if="selectionView === 'date'"
+      id="dateOptions"
+    >
+      <li
+        v-for="value in date"
+        v-if="seeMenu ==='yes'"
+        :key="value"
+      >
         {{ value }}
       </li>
     </ul>
@@ -100,18 +115,18 @@ function pickDate() {
   tonightOption.value = date[Math.floor(Math.random() * date.length)];
 }
 
-function dinnerMenu() {
-  console.log(dinner);
+// function dinnerMenu() {
+//   console.log(dinner);
 
-  for (const i = 0; i < dinner.size; i++) {
-    dinner(i);
-    console.log(dinner(i));
-  }
-}
+//   for (const i = 0; i < dinner.size; i++) {
+//     dinner(i);
+//     console.log(dinner(i));
+//   }
+// }
 
-function dateMenu() {
-  console.log(date.toString);
-}
+// function dateMenu() {
+//   console.log(date.toString);
+// }
 </script>
 
 <style>

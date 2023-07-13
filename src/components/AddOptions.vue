@@ -3,11 +3,13 @@
     <h2>This is toggling display</h2>
     
     <v-text-field
-      @keydown.enter="addDinner(input)"
-      label="add your own favourite options!"
       v-model="input"
-    ></v-text-field>
-    <v-btn @click="addDinner(input)">Add your favourite meals</v-btn>
+      label="add your own favourite options!"
+      @keydown.enter="addDinner(input)"
+    />
+    <v-btn @click="addDinner(input)">
+      Add your favourite meals
+    </v-btn>
   </div>
 </template>
 
