@@ -1,7 +1,7 @@
 <template>
   <div id="myDiv">
-    <h1>This is toggling display</h1>
-
+    <h2>This is toggling display</h2>
+    
     <v-text-field
       @keydown.enter="addDinner(input)"
       label="add your own favourite options!"
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref, set } from "vue";
+import { ref } from "vue";
 const input = ref("");
 
 function addDinner(din) {
@@ -20,3 +20,11 @@ function addDinner(din) {
   set(input, "");
 }
 </script>
+
+<style>
+h2{
+  margin: auto;
+  font-size: 20px;
+
+}
+</style>
