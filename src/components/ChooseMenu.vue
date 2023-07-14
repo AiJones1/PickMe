@@ -124,6 +124,7 @@ function pickDinner() {
 
 function pickDate() {
   tonightOption.value = dateIdeas[Math.floor(Math.random() * dateIdeas.value.length)]
+  tonightOption.value = dateIdeas.value[Math.floor(Math.random() * dateIdeas.value.length)]
 }
 
 // function dinnerMenu() {
