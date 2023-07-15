@@ -20,19 +20,20 @@
           item-value="value"
           variant="solo-filled"
         />
-
-        <v-btn v-if="selectionView === 'dinner'" class="py-4" @click="pickDinner(dinnerCook)"> Choose Dinner </v-btn>
-        <v-btn v-else class="py-4" @click="pickDate()"> Choose Date </v-btn>
-
         <v-select
-          v-model="seeMenu"
-          class="py-4"
-          label="See Choices"
-          :items="opts"
+          v-if="selectionView === 'date'"
+          v-model="dateBudget"
+          label="Specify"
+          :items="dateOpts"
           item-title="title"
           item-value="value"
           variant="solo-filled"
         />
+
+        <v-btn v-if="selectionView === 'dinner'" class="py-4" @click="pickDinner(dinnerCook)"> Choose Dinner </v-btn>
+        <v-btn v-else class="py-4" @click="pickDate(dateBudget)"> Choose Date </v-btn>
+
+        <v-switch v-model="seeMenu" label="See Choices" />
 
         <h3 v-if="selectionView === 'dinner'">Tonight's Dinner: {{ tonightDinner }}</h3>
         <h3 v-else>Tonight's date: {{ tonightOption }}</h3>
@@ -96,42 +97,70 @@ const items = [
 let selectionView = ref('dinner')
 let seeMenu = ref(false)
 let dinnerCook = ref('Either')
-
+let dateBudget = ref(4)
 const dinOpts = [
   { title: 'Cook', value: true },
   { title: 'TakeOut', value: false },
   { title: 'Either', value: 'Either' },
 ]
-
-const opts = [
-  { title: 'Yes', value: true },
-  { title: 'No', value: false },
+const dateOpts = [
+  { title: 'Any Cost', value: 4 },
+  { title: 'Expensive', value: 3 },
+  { title: 'Spenny', value: 2 },
+  { title: 'Cheap', value: 1 },
+  { title: 'Free', value: 0 },
 ]
 
 let tempArr = ref([])
 
 function pickDinner(dinnerCook) {
-
   if (dinnerCook === 'Either') {
 
-    console.log(dinnerCook)
-
     tonightDinner.value = dinnerIdeas.value[Math.floor(Math.random() * dinnerIdeas.value.length)].name
-  } else if ((dinnerCook === true)) {
+  } else if (dinnerCook === true) {
     for (let i = 0; i < dinnerIdeas.value.length; i++) {
-      if ((dinnerIdeas.value[i].cook === true)) {
-        console.log(dinnerIdeas.value[i].cook)
-        tempArr.push(dinnerIdeas.value[i].name)
+      if (dinnerIdeas.value[i].cook === true) {
+        tempArr.value.push(dinnerIdeas.value[i].name)
       }
-      tonightDinner.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
     }
     tonightDinner.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
   } else {
+    for (let j = 0; j < dinnerIdeas.value.length; j++) {
+      if (dinnerIdeas.value[j].cook === false) {
+        tempArr.value.push(dinnerIdeas.value[j].name)
+      }
+    }
+    tonightDinner.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
   }
+  tempArr.value = []
 }
 
-function pickDate() {
-  tonightOption.value = dateIdeas.value[Math.floor(Math.random() * dateIdeas.value.length)].name
+function pickDate(dateBudget) {
+  if (dateBudget > 2) {
+    tonightOption.value = dateIdeas.value[Math.floor(Math.random() * dateIdeas.value.length)].name
+  } else if (dateBudget === 2) {
+    for (let i = 0; i < dateIdeas.value.length; i++) {
+      if (dateIdeas.value[i].cost <= 2) {
+        tempArr.value.push(dateIdeas.value[i].name)
+      }
+    }
+    tonightOption.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
+  } else if (dateBudget === 1) {
+    for (let j = 0; j < dateIdeas.value.length; j++) {
+      if (dateIdeas.value[j].cost <= 1) {
+        tempArr.value.push(dateIdeas.value[j].name)
+      }
+    }
+    tonightOption.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
+  } else {
+    for (let k = 0; k < dateIdeas.value.length; k++) {
+      if (dateIdeas.value[k].cost === 0) {
+        tempArr.value.push(dateIdeas.value[k].name)
+      }
+    }
+    tonightOption.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
+  }
+  tempArr = []
 }
 </script>
 
