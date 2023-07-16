@@ -141,6 +141,7 @@ function pickDate(dateBudget) {
   } else if (dateBudget === 2) {
     for (let i = 0; i < dateIdeas.value.length; i++) {
       if (dateIdeas.value[i].cost <= 2) {
+        console.log(dateIdeas.value[i].name)
         tempArr.value.push(dateIdeas.value[i].name)
       }
     }
@@ -160,7 +161,7 @@ function pickDate(dateBudget) {
     }
     tonightOption.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
   }
-  tempArr = []
+  tempArr.value = []
 }
 </script>
 
