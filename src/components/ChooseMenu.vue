@@ -92,7 +92,7 @@ let tonightDinner = ref(' ')
 let tonightOption = ref(' ')
 const items = [
   { title: 'Dinner', value: 'dinner' },
-  { title: 'Date', value: 'date' },
+  { title: 'Date', value: 'date' }, 
 ]
 let selectionView = ref('dinner')
 let seeMenu = ref(false)
@@ -111,57 +111,44 @@ const dateOpts = [
   { title: 'Free', value: 0 },
 ]
 
-let tempArr = ref([])
-
 function pickDinner(dinnerCook) {
   if (dinnerCook === 'Either') {
-
-    tonightDinner.value = dinnerIdeas.value[Math.floor(Math.random() * dinnerIdeas.value.length)].name
-  } else if (dinnerCook === true) {
-    for (let i = 0; i < dinnerIdeas.value.length; i++) {
-      if (dinnerIdeas.value[i].cook === true) {
-        tempArr.value.push(dinnerIdeas.value[i].name)
-      }
-    }
-    tonightDinner.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
+    tonightDinner.value = pickRandom(dinnerIdeas.value).name
+  } else if (dinnerCook) {
+    const cookableItems = dinnerIdeas.value.filter(idea=>idea.cook)
+    tonightDinner.value = pickRandom(cookableItems).name
   } else {
-    for (let j = 0; j < dinnerIdeas.value.length; j++) {
-      if (dinnerIdeas.value[j].cook === false) {
-        tempArr.value.push(dinnerIdeas.value[j].name)
-      }
-    }
-    tonightDinner.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
+    const nonCookableItems = dinnerIdeas.value.filter(idea=> !idea.cook)
+    tonightDinner.value = pickRandom(nonCookableItems).name
   }
-  tempArr.value = []
 }
 
 function pickDate(dateBudget) {
-  if (dateBudget > 2) {
-    tonightOption.value = dateIdeas.value[Math.floor(Math.random() * dateIdeas.value.length)].name
-  } else if (dateBudget === 2) {
-    for (let i = 0; i < dateIdeas.value.length; i++) {
-      if (dateIdeas.value[i].cost <= 2) {
-        console.log(dateIdeas.value[i].name)
-        tempArr.value.push(dateIdeas.value[i].name)
-      }
-    }
-    tonightOption.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
-  } else if (dateBudget === 1) {
-    for (let j = 0; j < dateIdeas.value.length; j++) {
-      if (dateIdeas.value[j].cost <= 1) {
-        tempArr.value.push(dateIdeas.value[j].name)
-      }
-    }
-    tonightOption.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
-  } else {
-    for (let k = 0; k < dateIdeas.value.length; k++) {
-      if (dateIdeas.value[k].cost === 0) {
-        tempArr.value.push(dateIdeas.value[k].name)
-      }
-    }
-    tonightOption.value = tempArr.value[Math.floor(Math.random() * tempArr.value.length)]
+
+  switch(dateBudget){
+    case 4:
+    case 3:
+      tonightOption.value = pickRandom(dateIdeas.value).name
+      break;
+    case 2:
+      const spennyDates=  dateIdeas.value.filter(idea=> idea.cost<=2)
+      tonightOption.value =  pickRandom(spennyDates).name
+      break;
+    case 1:
+      const cheapDates = dateIdeas.value.filter(idea=> idea.cost<=1)
+      tonightOption.value =  pickRandom(cheapDates).name
+      break;
+    case 0:
+      const freeDates = dateIdeas.value.filter(idea=> idea.cost <=0)
+      tonightOption.value =  pickRandom(freeDates).name
+      break;
   }
-  tempArr.value = []
+}
+
+// Helpers
+
+function pickRandom(array) {
+  return array[Math.floor(Math.random() * array.length)]
 }
 </script>
 

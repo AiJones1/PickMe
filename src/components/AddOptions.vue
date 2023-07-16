@@ -24,7 +24,7 @@ import { ref } from "vue";
 const input = ref("");
 
 function addDinner(din) {
-  dinner.push(din);
+  dinnerIdeas.push(din);
   set(input, "");
 }
 </script>
