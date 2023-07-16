@@ -15,7 +15,7 @@
 <script setup>
 import { ref } from "vue";
 import AddOptions from "./AddOptions.vue";
-import ChooseMenu from "./ChooseMenu.vue";
+import ChooseMenu from "./Choose/ChooseMenu.vue";
 
 //refs
 const view = ref(0);
