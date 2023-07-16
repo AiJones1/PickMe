@@ -1,16 +1,22 @@
 <template>
-  <div id="myDiv">
-    <h2>This is toggling display</h2>
+  <v-card>
+    <div class="py-5 px-5" 
+    id="myDiv">
+    <h2>Add Your Own Favourites!</h2>
+
+    <v-select></v-select>
     
     <v-text-field
       v-model="input"
-      label="add your own favourite options!"
+      label="Type Here"
       @keydown.enter="addDinner(input)"
     />
     <v-btn @click="addDinner(input)">
       Add your favourite meals
     </v-btn>
   </div>
+  </v-card>
+  
 </template>
 
 <script setup>
