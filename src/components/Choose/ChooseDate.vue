@@ -9,7 +9,7 @@
       variant="solo-filled"
     />
     <v-btn class="py-4" @click="pickDate(dateBudget)"> Choose Date </v-btn>
-    <h3 class="pt-6">Tonight's date: {{ tonightOption }}</h3>
+    <h3 class="pt-6">Tonight's Date: {{ tonightOption }}</h3>
     <div v-if="seeMenu"  class="pt-12">
       <h3>Date Options</h3>
       <v-list >
@@ -22,7 +22,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 //props
 const props = defineProps({ seeMenu: Boolean })
 
