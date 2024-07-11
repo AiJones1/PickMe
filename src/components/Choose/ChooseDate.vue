@@ -9,11 +9,15 @@
       variant="solo-filled"
     />
     <v-btn class="py-4" @click="pickDate(dateBudget)"> Choose Date </v-btn>
-    <h3 class="pt-6">Tonight's Date: {{ tonightOption }}</h3>
+    <v-btn class="py-4" @click="threeChoices(dateBudget)">Three Options</v-btn>
+    <h3 class="pt-6">Tonight's Date:</h3>
+    <h2> {{ tonightOption }}</h2>
+    <h2> {{ opt2Date }}</h2>
+    <h2> {{ opt3Date }}</h2>
     <div v-if="seeMenu"  class="pt-12">
       <h3>Date Options</h3>
       <v-list >
-        <v-list-item v-for="date in dateIdeas" :key="date">
+        <v-list-item v-for="date in filteredDateIdeas" :key="date">
           {{ date.name }}
         </v-list-item>
       </v-list>
@@ -22,16 +26,10 @@
 </template>
 
 <script setup>
+import { ref , computed} from 'vue'
+
 //props
 const props = defineProps({ seeMenu: Boolean })
-
-const dateOpts = [
-  { title: 'Any Cost', value: 4 },
-  { title: 'Expensive', value: 3 },
-  { title: 'Spenny', value: 2 },
-  { title: 'Cheap', value: 1 },
-  { title: 'Free', value: 0 },
-]
 
 // refs
 let dateBudget = ref(4)
@@ -47,32 +45,55 @@ const dateIdeas = ref([
 ])
 
 let tonightOption = ref('')
+let opt2Date = ref('')
+let opt3Date = ref('')
 
+const dateOpts = [
+  { title: 'Any Cost', value: 4 },
+  { title: 'Expensive', value: 3 },
+  { title: 'Spenny', value: 2 },
+  { title: 'Cheap', value: 1 },
+  { title: 'Free', value: 0 },
+]
+
+const filteredDateIdeas = computed(()=>{
+  return filterDates(dateBudget.value, dateIdeas)
+})
 // functions
 
 function pickDate(dateBudget) {
-  switch (dateBudget) {
-    case 4:
-    case 3:
-      tonightOption.value = pickRandom(dateIdeas.value).name
-      break
-    case 2:
-      const spennyDates = dateIdeas.value.filter((idea) => idea.cost <= 2)
-      tonightOption.value = pickRandom(spennyDates).name
-      break
-    case 1:
-      const cheapDates = dateIdeas.value.filter((idea) => idea.cost <= 1)
-      tonightOption.value = pickRandom(cheapDates).name
-      break
-    case 0:
-      const freeDates = dateIdeas.value.filter((idea) => idea.cost <= 0)
-      tonightOption.value = pickRandom(freeDates).name
-      break
-  }
+  opt2Date = ref('')
+  opt3Date = ref('')
+  tonightOption.value=pickRandom(filterDates(dateBudget,dateIdeas)).name
+}
+
+function threeChoices(dateBudget){
+  const filteredDates = filterDates(dateBudget, dateIdeas)
+  tonightOption.value=pickRandom(filteredDates).name
+
+  let remainingDates = filteredDates.filter((opt)=> opt.name!=tonightOption.value)
+  opt2Date.value = pickRandom(remainingDates).name
+
+  remainingDates = remainingDates.filter((opt)=> opt.name!=opt2Date.value)
+  opt3Date.value = pickRandom(remainingDates).name
 }
 
 function pickRandom(array) {
   return array[Math.floor(Math.random() * array.length)]
+}
+
+function filterDates(dateBudget, array){
+  if(dateBudget===4){
+    return array.value
+  }else if(dateBudget===3){
+    return array.value.filter((opt)=> opt.cost===3)
+  }else if(dateBudget===2){
+    return array.value.filter((opt)=> opt.cost===2)
+  }else if(dateBudget>=1){
+    return array.value.filter((opt)=> opt.cost===1)
+  }else{
+    return array.value.filter((opt)=> opt.cost===0)
+}
 }
 </script>
 

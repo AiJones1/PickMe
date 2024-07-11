@@ -12,12 +12,12 @@
 
   <h3 class="pt-6">Tonight's Dinner: </h3>
   <h2>{{tonightDinner}}</h2>
-  <h2>{{longDinner}}</h2>
-  <h2>{{newDinner}}</h2>
+  <h2>{{opt2Dinner}}</h2>
+  <h2>{{opt3Dinner}}</h2>
   <div v-if="seeMenu" class="pt-12">
     <h3>Dinner Options</h3>
     <v-list>
-      <v-list-item v-for="dinner in dinnerIdeas" :key="dinner">
+      <v-list-item v-for="dinner in filteredDinnerIdeas" :key="dinner">
         {{ dinner.name }}
       </v-list-item>
     </v-list>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref , computed} from 'vue'
 //props
 const props = defineProps({ seeMenu: Boolean })
 
@@ -55,54 +55,53 @@ const dinnerIdeas = ref([
 ])
 
 let tonightDinner = ref('')
-let longDinner = ref('')
-let newDinner = ref('')
+let opt2Dinner = ref('')
+let opt3Dinner = ref('')
 
 const dinOpts = [
   { title: 'Quick', value: 'Quick' },
   { title: 'Long', value: 'Long' },
   { title: 'New', value: 'New' },
-  { title: 'Either', value: 'Either' },
+  { title: 'Anything', value: 'Either' },
 ]
+
+const filteredDinnerIdeas = computed(()=>{
+  return filterPreference(dinnerCook.value, dinnerIdeas)
+})
 
 // functions
 function pickDinner(dinnerCook) {
- longDinner = ref('')
- newDinner = ref('')
-  if (dinnerCook === 'Either') {
-    tonightDinner.value = pickRandom(dinnerIdeas.value).name
-  } else if (dinnerCook==='Quick') {
-    // const easyCookableItems = dinnerIdeas.value.filter((idea) => idea.cook==='Quick')
-
-    tonightDinner.value = pickRandom(filterQuick(dinnerIdeas)).name
-  } else if(dinnerCook==='Long'){
-    const hardCookableItems = dinnerIdeas.value.filter((idea) => idea.cook==='Long')
-    tonightDinner.value = pickRandom(hardCookableItems).name
-  } else{
-    const newCookableItems = dinnerIdeas.value.filter((idea)=> idea.cook==='New')
-    tonightDinner.value = pickRandom(newCookableItems).name
-
-  }
+  opt2Dinner = ref('')
+  opt3Dinner = ref('')
+  tonightDinner.value = pickRandom(filterPreference(dinnerCook, dinnerIdeas)).name
 }
 
  function threeOptions(dinnerCook){
-    tonightDinner.value =pickRandom(filterQuick(dinnerIdeas)).name
-    longDinner.value=pickRandom(filterLong(dinnerIdeas)).name
-    newDinner.value=pickRandom(filterNew(dinnerIdeas)).name
+  const filteredOptions = filterPreference(dinnerCook, dinnerIdeas)
+  tonightDinner.value =pickRandom(filteredOptions).name
+    
+    let remainingOptions = filteredOptions.filter(option=> option.name!=tonightDinner.value)
+    opt2Dinner.value=pickRandom(remainingOptions1).name
+    
+
+    remainingOptions = remainingOptions.filter(option=> option.name!=opt2Dinner.value)
+    opt3Dinner.value=pickRandom(remainingOptions).name
 }
 
 function pickRandom(array) {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-function filterQuick(array){
-  return array.value.filter((idea)=> idea.cook==='Quick')
-}
-function filterLong(array){
-  return array.value.filter((idea)=> idea.cook==='Long')
-}
-function filterNew(array){
-  return array.value.filter((idea)=>idea.cook==='New')
+function filterPreference(dinnerCook, array){
+    if(dinnerCook==='Either'){
+      return array.value
+    }else if(dinnerCook==='Quick'){
+      return array.value.filter((idea)=> idea.cook==='Quick')
+    }else if(dinnerCook==='Long'){
+      return array.value.filter((idea)=> idea.cook==='Long')
+    }else{
+      return array.value.filter((idea)=>idea.cook==='New')
+    }
 }
 </script>
 
